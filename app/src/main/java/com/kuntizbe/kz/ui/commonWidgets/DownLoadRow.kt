@@ -55,8 +55,6 @@ fun DownloadRow(
                 )
                 ctx.startActivity(urlIntent)
             }) {
-
-
             Text(text = btnText, color = Main)
         }
     }
