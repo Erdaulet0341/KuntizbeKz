@@ -24,20 +24,20 @@ import com.kuntizbe.kz.screens.playerTime.PlayerTimeScreen
 
 @RequiresApi(Build.VERSION_CODES.Q)
 @Composable
-fun NavigationSetup(navController: NavHostController) {
+fun NavigationSetup(navController: NavHostController, startDestination: String) {
 
-    NavHost(navController = navController, startDestination = NavigationScreens.Splash.route) {
+    NavHost(navController = navController, startDestination = startDestination) {
         composable(NavigationScreens.Splash.route) {
             SplashScreen(navController)
         }
-        composable(NavigationScreens.MainNavigation.route){
-            MainNavigationScreen(navController1 = navController)
+        composable(NavigationScreens.MainNavigation.route) {
+            MainNavigationScreen(navController1 = navController, startDestination = MainNavigationDestination.Home)
         }
         composable(NavigationScreens.Home.route) {
             HomeScreen(navController)
         }
         composable(NavigationScreens.PlayerTime.route) {
-            PlayerTimeScreen(navController)
+            MainNavigationScreen(navController1 = navController, startDestination = MainNavigationDestination.PlayerTime)
         }
         composable(NavigationScreens.Info.route) {
             InfoScreen(navController)

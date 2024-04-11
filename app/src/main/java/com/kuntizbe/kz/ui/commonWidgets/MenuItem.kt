@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.Text
@@ -29,13 +30,13 @@ import com.kuntizbe.kz.ui.theme.Main
 import com.kuntizbe.kz.ui.theme.White
 
 @Composable
-fun MenuItem(text:String, icon :ImageVector, onClick:() -> Unit){
+fun MenuItem(text:String, icon :ImageVector, onClick: () -> Unit){
 
     Box(
         modifier = Modifier
-            .height(120.dp)
-            .width(100.dp)
-            .fillMaxWidth(0.3f)
+            .height(130.dp)
+            .fillMaxWidth()
+            .padding(horizontal = 5.dp)
             .border(width = 3.dp, color = Main)
             .background(White)
             .clickable {
@@ -51,6 +52,8 @@ fun MenuItem(text:String, icon :ImageVector, onClick:() -> Unit){
                 tint = Main
             )
             Text(
+                modifier = Modifier
+                    .padding(horizontal = 3.dp),
                 text = text.uppercase(),
                 style = TextStyle(color = Main, fontWeight = FontWeight.SemiBold, fontSize = 14.sp),
                 textAlign = TextAlign.Center

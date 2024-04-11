@@ -27,7 +27,7 @@ import dev.olshevski.navigation.reimagined.rememberNavController
 
 @Composable
 fun MainNavigationScreen(
-    startDestination: MainNavigationDestination = MainNavigationDestination.Home,
+    startDestination: MainNavigationDestination,
     navController1: androidx.navigation.NavController
 ) {
     val navController = rememberNavController(

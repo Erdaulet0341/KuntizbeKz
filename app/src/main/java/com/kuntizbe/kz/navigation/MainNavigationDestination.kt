@@ -1,7 +1,9 @@
 package com.kuntizbe.kz.navigation
 
 import android.annotation.SuppressLint
+import android.os.Build
 import android.os.Parcelable
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.navigation.NavController
@@ -36,6 +38,7 @@ sealed class MainNavigationDestination: Screen {
 
     @Immutable @Parcelize
     object Menu: MainNavigationDestination() {
+        @RequiresApi(Build.VERSION_CODES.Q)
         @Composable
         override fun Content(navController: NavController) {
             MenuScreen(navController)

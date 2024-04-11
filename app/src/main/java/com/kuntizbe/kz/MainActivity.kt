@@ -6,6 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
 import androidx.navigation.compose.rememberNavController
+import com.kuntizbe.kz.navigation.NavigationScreens
 import com.kuntizbe.kz.navigation.NavigationSetup
 import com.kuntizbe.kz.ui.theme.KuntizbeKzTheme
 
@@ -17,7 +18,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             KuntizbeKzTheme {
                 val navController = rememberNavController()
-                NavigationSetup(navController = navController)
+                NavigationSetup(navController = navController, startDestination =  NavigationScreens.Splash.route)
             }
         }
     }
