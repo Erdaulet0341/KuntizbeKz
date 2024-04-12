@@ -73,7 +73,6 @@ fun MenuScreen(navController: NavController) {
                                 navController.navigate(
                                     NavigationScreens.PlayerTime.route
                                 )
-//                                NavigationSetup(navController = rememberNavController(), startDestination =  NavigationScreens.Splash.route)
                             }
                         )
                     }

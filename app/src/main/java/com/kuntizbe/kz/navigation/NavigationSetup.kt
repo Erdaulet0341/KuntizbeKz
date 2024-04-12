@@ -34,13 +34,13 @@ fun NavigationSetup(navController: NavHostController, startDestination: String) 
             MainNavigationScreen(navController1 = navController, startDestination = MainNavigationDestination.Home)
         }
         composable(NavigationScreens.Home.route) {
-            HomeScreen(navController)
+            MainNavigationScreen(navController1 = navController, startDestination = MainNavigationDestination.Home)
         }
         composable(NavigationScreens.PlayerTime.route) {
             MainNavigationScreen(navController1 = navController, startDestination = MainNavigationDestination.PlayerTime)
         }
         composable(NavigationScreens.Info.route) {
-            InfoScreen(navController)
+            MainNavigationScreen(navController1 = navController, startDestination = MainNavigationDestination.Info)
         }
         composable(NavigationScreens.Menu.route) {
             MenuScreen(navController)

@@ -14,7 +14,8 @@ data class Typographies(
     val contentTextColor:TextStyle,
     val contentTextColorBold: TextStyle,
     val smallGrayText:TextStyle,
-    val contentTextColorMain:TextStyle
+    val contentTextColorMain:TextStyle,
+    val firstHeaderTextMain32sp:TextStyle
     )
 
 val TypographiesCostom = Typographies(
@@ -40,6 +41,12 @@ val TypographiesCostom = Typographies(
         fontFamily = FontFamily.SansSerif,
         fontWeight = FontWeight.W700,
         fontSize = 24.sp,
+        color = Main
+    ),
+    firstHeaderTextMain32sp = TextStyle(
+        fontFamily = FontFamily.SansSerif,
+        fontWeight = FontWeight.Bold,
+        fontSize = 32.sp,
         color = Main
     ),
     contentTextColor = TextStyle(

@@ -100,4 +100,15 @@
     <string name="qiyamet_text">\u00A0\u00A0 Бұл кітапта адамның өлімі, рухтың денеден айрылуы, қабір өмірі, қабір сұрақтары, қиямет күнінде адамдардың есепке тартылуы, жаннат пен тозаққа қалай жіберілетіні туралы кеңінен баяндалған...</string>
     <string name="jizn_text">\u00A0\u00A0 Эта книга о благословенной жизни нашего любимого пророка Мухаммеда (мир ему), посланнике и любимце Всевышнего. Те, кто будут внимательно читать книгу, непременно проникнутся восхищением к посланнику Аллаха...</string>
 
+
+<!--    setting screen-->
+    <string name="search_hidden">Қала аты...</string>
+    <string name="israk">Ишрак</string>
+    <string name="keraxat">Керахат</string>
+    <string name="asriaual">Асри Әууәл</string>
+    <string name="isfifar">Исфирар</string>
+    <string name="ishtibak">Иштибак</string>
+    <string name="ishaisani">Ишаи сани</string>
+    <string name="ok">OK</string>
+
 </resources>
