@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("kotlin-parcelize")
+    id("kotlin-kapt")
 }
 
 android {
@@ -18,6 +19,9 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
+        }
+        kapt {
+            arguments {arg("room.schemaLocation", "$projectDir/schemas")}
         }
     }
 
@@ -84,7 +88,13 @@ dependencies {
     //retrofit for requests
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("androidx.compose.runtime:runtime-livedata:1.6.5")
 
     //gson
     implementation("com.google.code.gson:gson:2.10.1")
+
+    //room
+    implementation ("androidx.room:room-runtime:2.6.1") // Библиотека "Room"
+    kapt("androidx.room:room-compiler:2.6.1") // Кодогенератор
+    implementation("androidx.room:room-ktx:2.6.1")
 }

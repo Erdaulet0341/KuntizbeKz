@@ -4,6 +4,8 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,20 +15,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
-import androidx.compose.material.Surface
-import androidx.compose.material3.Button
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,9 +39,10 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.kuntizbe.kz.R
+import com.kuntizbe.kz.screens.cities.SearchDialog
+import com.kuntizbe.kz.screens.cities.cities
 import com.kuntizbe.kz.ui.commonWidgets.CenteredToolbar
 import com.kuntizbe.kz.ui.commonWidgets.PointDivider
 import com.kuntizbe.kz.ui.theme.GrayDivider
@@ -60,7 +59,6 @@ import java.util.Locale
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun SettingsScreen(navController: NavController) {
-    val viewModel: SettingsViewModel = viewModel()
     var checkedIshrak by remember { mutableStateOf(false) }
     var checkedKerakat by remember { mutableStateOf(false) }
     var checkedAsri by remember { mutableStateOf(false) }
@@ -68,12 +66,9 @@ fun SettingsScreen(navController: NavController) {
     var checkedIshtibak by remember { mutableStateOf(false) }
     var checkedIshai by remember { mutableStateOf(false) }
 
-    val searchText by viewModel.searchText.collectAsState()
-    val isSearching by viewModel.isSearching.collectAsState()
-    val countriesList by viewModel.filteredCountries.collectAsState()
+    var isDialogOpen by remember { mutableStateOf(false) }
 
-
-    gregorianToHijriFormatted(2024, 4, 3)
+//    gregorianToHijriFormatted(2024, 4, 3)
 
     Box(
         modifier = Modifier
@@ -95,7 +90,7 @@ fun SettingsScreen(navController: NavController) {
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(horizontal = 16.dp)
-//                    .verticalScroll(rememberScrollState())
+                    .verticalScroll(rememberScrollState())
             ) {
 
                 Spacer(modifier = Modifier.height(25.dp))
@@ -107,27 +102,33 @@ fun SettingsScreen(navController: NavController) {
                         .fillMaxWidth()
                 )
 
-                SearchBar(
-                    query = searchText,
-                    onQueryChange = viewModel::onSearchTextChange,
-                    active = isSearching,
-                    onActiveChange = viewModel::onToggleSearch
-                )
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(45.dp)
+                        .border(width = 1.dp, color = Main, shape = RectangleShape)
+                        .clickable { isDialogOpen = !isDialogOpen }
+                        .padding(horizontal = 20.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.search_hidden_city),
+                        modifier = Modifier,
+                        color = GraySettings
+                    )
+                    Icon(imageVector = Icons.Default.Search, contentDescription = "search", tint = Main)
+                }
+
+                if (isDialogOpen) {
+                    SearchDialog(cities) {
+                        isDialogOpen = !isDialogOpen
+                    }
+                }
 
                 Spacer(modifier = Modifier.height(16.dp))
 
                 PointDivider(pointSize = 100)
-
-                if (isSearching && countriesList.isNotEmpty()) {
-                    LazyColumn {
-                        items(countriesList) { country ->
-                            Text(
-                                text = country.name,
-                                modifier = Modifier.padding(8.dp)
-                            )
-                        }
-                    }
-                }
 
                 Spacer(modifier = Modifier.height(60.dp))
 
@@ -227,44 +228,6 @@ fun SwitchSettings(text: String, checked: Boolean, onCheckedChange: (Boolean) ->
             ),
             checked = checked,
             onCheckedChange = onCheckedChange
-        )
-    }
-}
-
-
-@Composable
-fun SearchBar(
-    query: String,
-    onQueryChange: (String) -> Unit,
-    active: Boolean,
-    onActiveChange: (Boolean) -> Unit
-) {
-    Surface(
-        modifier = Modifier.fillMaxWidth(),
-        color = White,
-    ) {
-        TextField(
-            value = query,
-            onValueChange = {
-                onQueryChange(it)
-                if (it.isEmpty() && active) {
-                    onActiveChange(false)
-                    onQueryChange("")
-                } else {
-                    onActiveChange(true)
-                }
-            },
-            label = { Text(stringResource(id = R.string.search_hidden)) },
-            trailingIcon = {
-                if (active && query.isNotEmpty()) {
-                    Button(
-                        shape = RectangleShape,
-                        modifier = Modifier.width(0.dp),
-                        onClick = { /*TODO*/ }) {
-                        Text(text = stringResource(id = R.string.ok))
-                    }
-                }
-            }
         )
     }
 }

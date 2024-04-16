@@ -112,7 +112,7 @@ fun CalendarScreen(navController: NavController) {
                     text = "ОК",
                     style = TextStyle(
                         color = White,
-                        fontSize = 17.sp,
+                        fontSize = 21.sp,
                         fontWeight = FontWeight.Bold
                     )
                 )

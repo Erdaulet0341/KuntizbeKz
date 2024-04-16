@@ -107,5 +107,5 @@ private fun MainNavigationDestination.getIconAndText() = when (this) {
     is MainNavigationDestination.Home -> R.drawable.home_24 to R.string.home_title
     is MainNavigationDestination.Menu -> R.drawable.menu_24 to R.string.menu_title
     is MainNavigationDestination.Info -> R.drawable.info_24 to R.string.info_title
-    is MainNavigationDestination.PlayerTime -> R.drawable.access_time_24 to R.string.player_time_title
+    is MainNavigationDestination.PrayerTime -> R.drawable.access_time_24 to R.string.player_time_title
 }

@@ -4,7 +4,7 @@ sealed class NavigationScreens(val route: String) {
     object Splash : NavigationScreens("splash_screen")
     object MainNavigation : NavigationScreens("main_navigation")
     object Home : NavigationScreens("home_screen")
-    object PlayerTime : NavigationScreens("player_time")
+    object PrayerTime : NavigationScreens("player_time")
     object Info : NavigationScreens("info_screen")
     object Menu : NavigationScreens("menu_screen")
     object Calendar : NavigationScreens("calendar")

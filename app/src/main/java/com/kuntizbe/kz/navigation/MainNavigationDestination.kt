@@ -46,7 +46,7 @@ sealed class MainNavigationDestination: Screen {
     }
 
     @Immutable @Parcelize
-    object PlayerTime: MainNavigationDestination() {
+    object PrayerTime: MainNavigationDestination() {
         @Composable
         override fun Content(navController: NavController) {
             PlayerTimeScreen(navController)
@@ -55,7 +55,7 @@ sealed class MainNavigationDestination: Screen {
 
     companion object {
         fun values() = arrayOf(
-            PlayerTime,
+            PrayerTime,
             Home,
             Info,
             Menu

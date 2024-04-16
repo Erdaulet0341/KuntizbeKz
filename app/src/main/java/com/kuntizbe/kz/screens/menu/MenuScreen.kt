@@ -1,10 +1,8 @@
 package com.kuntizbe.kz.screens.menu
 
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,10 +12,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,14 +22,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.kuntizbe.kz.R
 import com.kuntizbe.kz.navigation.NavigationScreens
-import com.kuntizbe.kz.navigation.NavigationSetup
 import com.kuntizbe.kz.ui.commonWidgets.CenteredToolbar
 import com.kuntizbe.kz.ui.commonWidgets.MenuItem
-import com.kuntizbe.kz.ui.theme.Black
-import com.kuntizbe.kz.ui.theme.Main
 import com.kuntizbe.kz.ui.theme.White
 
 @RequiresApi(Build.VERSION_CODES.Q)
@@ -71,7 +63,7 @@ fun MenuScreen(navController: NavController) {
                             icon = ImageVector.vectorResource(R.drawable.access_time_24),
                             onClick = {
                                 navController.navigate(
-                                    NavigationScreens.PlayerTime.route
+                                    NavigationScreens.PrayerTime.route
                                 )
                             }
                         )
