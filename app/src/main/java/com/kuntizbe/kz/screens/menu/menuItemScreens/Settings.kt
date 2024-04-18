@@ -33,12 +33,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.kuntizbe.kz.R
 import com.kuntizbe.kz.screens.cities.SearchDialog
@@ -47,6 +50,7 @@ import com.kuntizbe.kz.ui.commonWidgets.CenteredToolbar
 import com.kuntizbe.kz.ui.commonWidgets.PointDivider
 import com.kuntizbe.kz.ui.theme.GrayDivider
 import com.kuntizbe.kz.ui.theme.GraySettings
+import com.kuntizbe.kz.ui.theme.GrayText
 import com.kuntizbe.kz.ui.theme.Main
 import com.kuntizbe.kz.ui.theme.MainSecond
 import com.kuntizbe.kz.ui.theme.White
@@ -59,16 +63,17 @@ import java.util.Locale
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun SettingsScreen(navController: NavController) {
-    var checkedIshrak by remember { mutableStateOf(false) }
-    var checkedKerakat by remember { mutableStateOf(false) }
-    var checkedAsri by remember { mutableStateOf(false) }
-    var checkedIsfifar by remember { mutableStateOf(false) }
-    var checkedIshtibak by remember { mutableStateOf(false) }
-    var checkedIshai by remember { mutableStateOf(false) }
+    val viewModel:SettingsViewModel = viewModel()
+    val context = LocalContext.current
 
-    var isDialogOpen by remember { mutableStateOf(false) }
+    var checkedIshrak by remember { mutableStateOf(viewModel.getSettingsFromSharedPreferences(context, "ishrak")) }
+    var checkedKerakat by remember { mutableStateOf(viewModel.getSettingsFromSharedPreferences(context, "kerakat")) }
+    var checkedAsri by remember { mutableStateOf(viewModel.getSettingsFromSharedPreferences(context, "asri")) }
+    var checkedIsfifar by remember { mutableStateOf(viewModel.getSettingsFromSharedPreferences(context, "isfifar")) }
+    var checkedIshtibak by remember { mutableStateOf(viewModel.getSettingsFromSharedPreferences(context, "ishtibak")) }
+    var checkedIshai by remember { mutableStateOf(viewModel.getSettingsFromSharedPreferences(context, "ishai")) }
 
-//    gregorianToHijriFormatted(2024, 4, 3)
+//    var isDialogOpen by remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier
@@ -89,53 +94,55 @@ fun SettingsScreen(navController: NavController) {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(horizontal = 16.dp)
+                    .padding(horizontal = 20.dp)
                     .verticalScroll(rememberScrollState())
             ) {
 
-                Spacer(modifier = Modifier.height(25.dp))
+//                Spacer(modifier = Modifier.height(25.dp))
+//
+//                Divider(
+//                    color = GrayDivider, modifier = Modifier
+//                        .padding(vertical = 14.dp)
+//                        .height(1.dp)
+//                        .fillMaxWidth()
+//                )
+//
+//                Row(
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .height(45.dp)
+//                        .border(width = 1.dp, color = Main, shape = RectangleShape)
+//                        .clickable { isDialogOpen = !isDialogOpen }
+//                        .padding(horizontal = 20.dp),
+//                    verticalAlignment = Alignment.CenterVertically,
+//                    horizontalArrangement = Arrangement.SpaceBetween
+//                ) {
+//                    Text(
+//                        text = stringResource(id = R.string.search_hidden_city),
+//                        modifier = Modifier,
+//                        color = GraySettings
+//                    )
+//                    Icon(imageVector = Icons.Default.Search, contentDescription = "search", tint = Main)
+//                }
+//
+//                if (isDialogOpen) {
+//                    SearchDialog(cities) {
+//                        isDialogOpen = !isDialogOpen
+//                    }
+//                }
+//
+//                Spacer(modifier = Modifier.height(16.dp))
+//
+//                PointDivider(pointSize = 100)
 
-                Divider(
-                    color = GrayDivider, modifier = Modifier
-                        .padding(vertical = 14.dp)
-                        .height(1.dp)
-                        .fillMaxWidth()
-                )
-
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(45.dp)
-                        .border(width = 1.dp, color = Main, shape = RectangleShape)
-                        .clickable { isDialogOpen = !isDialogOpen }
-                        .padding(horizontal = 20.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.search_hidden_city),
-                        modifier = Modifier,
-                        color = GraySettings
-                    )
-                    Icon(imageVector = Icons.Default.Search, contentDescription = "search", tint = Main)
-                }
-
-                if (isDialogOpen) {
-                    SearchDialog(cities) {
-                        isDialogOpen = !isDialogOpen
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                PointDivider(pointSize = 100)
-
-                Spacer(modifier = Modifier.height(60.dp))
+                Spacer(modifier = Modifier.height(40.dp))
 
                 SwitchSettings(
                     text = stringResource(id = R.string.israk),
                     checked = checkedIshrak,
-                    onCheckedChange = { newCheckedState -> checkedIshrak = newCheckedState })
+                    onCheckedChange = { newCheckedState -> checkedIshrak = newCheckedState
+                    viewModel.saveSettingsToSharedPreferences(context, "ishrak", newCheckedState)
+                    } )
                 Divider(
                     color = GrayDivider, modifier = Modifier
                         .padding(top = 4.dp, bottom = 10.dp)
@@ -146,7 +153,9 @@ fun SettingsScreen(navController: NavController) {
                 SwitchSettings(
                     text = stringResource(id = R.string.keraxat),
                     checked = checkedKerakat,
-                    onCheckedChange = { newCheckedState -> checkedKerakat = newCheckedState })
+                    onCheckedChange = { newCheckedState -> checkedKerakat = newCheckedState
+                        viewModel.saveSettingsToSharedPreferences(context, "kerakat", newCheckedState)
+                    })
                 Divider(
                     color = GrayDivider, modifier = Modifier
                         .padding(top = 4.dp, bottom = 10.dp)
@@ -157,7 +166,10 @@ fun SettingsScreen(navController: NavController) {
                 SwitchSettings(
                     text = stringResource(id = R.string.asriaual),
                     checked = checkedAsri,
-                    onCheckedChange = { newCheckedState -> checkedAsri = newCheckedState })
+                    onCheckedChange = { newCheckedState -> checkedAsri = newCheckedState
+                        viewModel.saveSettingsToSharedPreferences(context, "asri", newCheckedState)
+
+                    })
                 Divider(
                     color = GrayDivider, modifier = Modifier
                         .padding(top = 4.dp, bottom = 10.dp)
@@ -168,7 +180,9 @@ fun SettingsScreen(navController: NavController) {
                 SwitchSettings(
                     text = stringResource(id = R.string.isfifar),
                     checked = checkedIsfifar,
-                    onCheckedChange = { newCheckedState -> checkedIsfifar = newCheckedState })
+                    onCheckedChange = { newCheckedState -> checkedIsfifar = newCheckedState
+                        viewModel.saveSettingsToSharedPreferences(context, "isfifar", newCheckedState)
+                    })
                 Divider(
                     color = GrayDivider, modifier = Modifier
                         .padding(top = 4.dp, bottom = 10.dp)
@@ -179,7 +193,9 @@ fun SettingsScreen(navController: NavController) {
                 SwitchSettings(
                     text = stringResource(id = R.string.ishtibak),
                     checked = checkedIshtibak,
-                    onCheckedChange = { newCheckedState -> checkedIshtibak = newCheckedState })
+                    onCheckedChange = { newCheckedState -> checkedIshtibak = newCheckedState
+                        viewModel.saveSettingsToSharedPreferences(context, "ishtibak", newCheckedState)
+                    })
                 Divider(
                     color = GrayDivider, modifier = Modifier
                         .padding(top = 4.dp, bottom = 10.dp)
@@ -190,12 +206,21 @@ fun SettingsScreen(navController: NavController) {
                 SwitchSettings(
                     text = stringResource(id = R.string.ishaisani),
                     checked = checkedIshai,
-                    onCheckedChange = { newCheckedState -> checkedIshai = newCheckedState })
+                    onCheckedChange = { newCheckedState -> checkedIshai = newCheckedState
+                        viewModel.saveSettingsToSharedPreferences(context, "ishai", newCheckedState)
+                    })
                 Divider(
                     color = GrayDivider, modifier = Modifier
                         .padding(top = 4.dp, bottom = 10.dp)
                         .height(1.dp)
                         .fillMaxWidth()
+                )
+
+                Text(
+                    modifier = Modifier.fillMaxWidth().padding(top = 30.dp),
+                    text = stringResource(id = R.string.settings_text),
+                    style = TextStyle(fontWeight = FontWeight.SemiBold, fontSize = 18.sp, color = Main),
+                    textAlign = TextAlign.Justify
                 )
             }
         }
@@ -230,16 +255,4 @@ fun SwitchSettings(text: String, checked: Boolean, onCheckedChange: (Boolean) ->
             onCheckedChange = onCheckedChange
         )
     }
-}
-
-@RequiresApi(Build.VERSION_CODES.O)
-fun gregorianToHijriFormatted(gregorianYear: Int, gregorianMonth: Int, gregorianDayOfMonth: Int) {
-    val gregorianDate = LocalDate.of(gregorianYear, gregorianMonth, gregorianDayOfMonth)
-    val hijriDate = HijrahDate.from(gregorianDate)
-
-    val formatter = DateTimeFormatter.ofPattern("d-MMMM yyyy", Locale("ru", "KZ"))
-    val formatted = formatter.format(hijriDate)
-
-    Log.d("API", formatted)
-
 }

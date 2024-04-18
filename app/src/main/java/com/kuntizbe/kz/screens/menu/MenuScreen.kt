@@ -47,10 +47,12 @@ fun MenuScreen(navController: NavController) {
                 }
             )
 
-            Column(modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .verticalScroll(rememberScrollState())
-                .fillMaxWidth()) {
+            Column(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .verticalScroll(rememberScrollState())
+                    .fillMaxWidth()
+            ) {
 
                 Spacer(modifier = Modifier.height(10.dp))
                 Row(

@@ -147,21 +147,6 @@ fun HomeToolBar(
             containerColor = White ,
             scrolledContainerColor = MainLight.copy(alpha = 0.7f),
         ),
-        scrollBehavior = scrollBehavior,
-        actions = {
-            Icon(
-                modifier = Modifier
-                    .clip(CircleShape)
-                    .clickableWithIndication {
-//                        globalDestinationController.navigateToGlobalDestination(
-//                            replace = false,
-//                            NotificationScreenDestination
-//                        )
-                    }
-                    .padding(8.dp),
-                imageVector = ImageVector.vectorResource(id = R.drawable.search_24),
-                contentDescription = null,
-                tint = Main)
-        }
+        scrollBehavior = scrollBehavior
     )
 }

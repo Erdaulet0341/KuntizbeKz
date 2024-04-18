@@ -16,7 +16,6 @@ import kotlinx.coroutines.launch
 
 class CitiesViewModel : ViewModel() {
 
-
     private val _allTimes = MutableStateFlow<List<RoomData>>(emptyList())
     val allTimes: StateFlow<List<RoomData>> = _allTimes.asStateFlow()
     private val repository = PrayerTImeRepository()

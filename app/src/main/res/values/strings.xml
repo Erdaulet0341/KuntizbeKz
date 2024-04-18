@@ -112,4 +112,23 @@
     <string name="ishaisani">Ишаи сани</string>
     <string name="ok">OK</string>
 
+<!--    prayer times screen-->
+    <string name="imsak1">Имсак</string>
+    <string name="bamdat1">Бамдат</string>
+    <string name="kun1">Күн</string>
+    <string name="ishraq1">Ишрак</string>
+    <string name="kerahat1">Керахат</string>
+    <string name="besin1">Бесін</string>
+    <string name="asriauual1">Асри Әууал</string>
+    <string name="ekindi1">Екінді</string>
+    <string name="isfirar1">Исфирар</string>
+    <string name="aqsham1">Ақшам</string>
+    <string name="ishtibaq1">Иштибак</string>
+    <string name="quptan1">Құптан</string>
+    <string name="ishaisani1">Ишаи Сани</string>
+    <string name="all_cities">Барлық қалалар</string>
+    <string name="mine_cities">Менің қалаларым</string>
+    <string name="null_cities">Сізде сақталған қалалар жоқ! \nБарлық қалалар бөліміне өтіп қалаларды жүктеп алыңыз.</string>
+    <string name="settings_text">Басты беттегі намаз уақыттарын реттеуге болады. Өзіңізге қажет намаз уақыттарын қосып, қалғанын өшіріп қойыңыз. Намаз уақыттарының толық анықтамасын "Мәзір" -> "Мәліметтер" -> "Уақыттардың анықтамасы" бөлімінен көруге болады.</string>
+
 </resources>

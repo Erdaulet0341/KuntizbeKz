@@ -7,16 +7,16 @@ data class Region(
 )
 
 val REGIONS = listOf(
-//    Region(nameKaz = "Ақмола облысы", nameEng = "Akmola", listOf()),
-//    Region(nameKaz = "Ақтөбе облысы", nameEng = "Aqtobe", listOf()),
-//    Region(nameKaz = "Алматы облысы", nameEng = "Almaty", listOf()),
-//    Region(nameKaz = "Атырау облысы", nameEng = "Atyrau", listOf()),
-//    Region(nameKaz = "Батыс Қазақстан облысы", nameEng = "West Kazakhstan", listOf()),
-//    Region(nameKaz = "Жамбыл облысы", nameEng = "Dzhambul (Zhambyl)", listOf()),
-//    Region(nameKaz = "Қарағанды облысы", nameEng = "Karaganda", listOf()),
-//    Region(nameKaz = "Қостанай облысы", nameEng = "Qostanay", listOf()),
-//    Region(nameKaz = "Қызылорда облысы", nameEng = "Kyzylorda", listOf()),
-//    Region(nameKaz = "Маңғыстау облысы", nameEng = "Mangystau", listOf()),
+    Region(nameKaz = "Ақмола облысы", nameEng = "Akmola", listOf()),
+    Region(nameKaz = "Ақтөбе облысы", nameEng = "Aqtobe", listOf()),
+    Region(nameKaz = "Алматы облысы", nameEng = "Almaty", listOf()),
+    Region(nameKaz = "Атырау облысы", nameEng = "Atyrau", listOf()),
+    Region(nameKaz = "Батыс Қазақстан облысы", nameEng = "West Kazakhstan", listOf()),
+    Region(nameKaz = "Жамбыл облысы", nameEng = "Dzhambul (Zhambyl)", listOf()),
+    Region(nameKaz = "Қарағанды облысы", nameEng = "Karaganda", listOf()),
+    Region(nameKaz = "Қостанай облысы", nameEng = "Qostanay", listOf()),
+    Region(nameKaz = "Қызылорда облысы", nameEng = "Kyzylorda", listOf()),
+    Region(nameKaz = "Маңғыстау облысы", nameEng = "Mangystau", listOf()),
     Region(
         nameKaz = "Павлодар облысы",
         nameEng = "Pavlodar",

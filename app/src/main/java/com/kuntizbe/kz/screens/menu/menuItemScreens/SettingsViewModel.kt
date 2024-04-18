@@ -1,4 +1,6 @@
 package com.kuntizbe.kz.screens.menu.menuItemScreens
+import android.content.Context
+import android.content.SharedPreferences
 import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -12,45 +14,20 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class SettingsViewModel : ViewModel() {
-    private val _isSearching = MutableStateFlow(false)
-    val isSearching: StateFlow<Boolean> = _isSearching
 
-    private val _searchText = MutableStateFlow("")
-    val searchText: StateFlow<String> = _searchText
-
-    private val _countriesList = listOf(
-        Country("kaz", "Kaz"),
-        Country("rus", "Rus")
-    )
-
-    val filteredCountries: StateFlow<List<Country>> = _searchText
-        .map { text ->
-            if (text.isBlank()) {
-                _countriesList
-            } else {
-                _countriesList.filter { country ->
-                    country.name.uppercase().contains(text.trim().uppercase())
-                }
-            }
-        }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = _countriesList
+    fun saveSettingsToSharedPreferences(context: Context, name: String, value:Boolean) {
+        val sharedPref: SharedPreferences = context.getSharedPreferences(
+            "LAST_CITY_ID", Context.MODE_PRIVATE
         )
-
-    fun onSearchTextChange(text: String) {
-        _searchText.value = text
+        val editor: SharedPreferences.Editor = sharedPref.edit()
+        editor.putString(name, value.toString()).apply()
     }
 
-    fun onToggleSearch(active: Boolean) {
-        _isSearching.value = active
-        if (!active) {
-            onSearchTextChange("")
-        }
+    fun getSettingsFromSharedPreferences(context: Context, name: String): Boolean {
+        val sharedPref: SharedPreferences = context.getSharedPreferences(
+            "LAST_CITY_ID", Context.MODE_PRIVATE
+        )
+        return sharedPref.getString(name, "false")!!.toBoolean()
     }
+
 }
-
-
-@Immutable
-data class Country(val code: String, val name: String)
