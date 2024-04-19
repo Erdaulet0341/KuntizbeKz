@@ -18,7 +18,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             KuntizbeKzTheme {
                 val navController = rememberNavController()
-                NavigationSetup(navController = navController, startDestination =  NavigationScreens.Home.route)
+                NavigationSetup(navController = navController, startDestination =  NavigationScreens.Splash.route)
             }
         }
     }

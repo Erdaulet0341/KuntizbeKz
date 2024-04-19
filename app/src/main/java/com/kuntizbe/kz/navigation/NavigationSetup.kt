@@ -4,19 +4,19 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
-import com.kuntizbe.kz.screens.splash.SplashScreen
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.kuntizbe.kz.screens.cities.CitiesScreen
 import com.kuntizbe.kz.screens.menu.MenuScreen
 import com.kuntizbe.kz.screens.menu.menuItemScreens.AboutUsScreen
 import com.kuntizbe.kz.screens.menu.menuItemScreens.BookScreen
 import com.kuntizbe.kz.screens.menu.menuItemScreens.CalendarScreen
-import com.kuntizbe.kz.screens.cities.CitiesScreen
 import com.kuntizbe.kz.screens.menu.menuItemScreens.FaqScreen
 import com.kuntizbe.kz.screens.menu.menuItemScreens.LinksScreen
 import com.kuntizbe.kz.screens.menu.menuItemScreens.MessageScreen
 import com.kuntizbe.kz.screens.menu.menuItemScreens.QiblaScreen
 import com.kuntizbe.kz.screens.menu.menuItemScreens.SettingsScreen
+import com.kuntizbe.kz.screens.splash.SplashScreen
 
 
 @RequiresApi(Build.VERSION_CODES.Q)

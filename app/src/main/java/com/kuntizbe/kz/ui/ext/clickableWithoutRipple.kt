@@ -2,12 +2,9 @@ package com.kuntizbe.kz.ui.ext
 
 import android.annotation.SuppressLint
 import android.graphics.Rect
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewTreeObserver
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Indication
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.PaddingValues
@@ -17,25 +14,17 @@ import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
-import androidx.compose.ui.draw.scale
-import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.pointerInteropFilter
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.semantics.Role
 
@@ -85,56 +74,6 @@ fun Modifier.clickableWithIndication(
     )
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
-fun Modifier.scaledClickable(
-    scalePercent: Float = 0.92f,
-    onClick: () -> Unit
-): Modifier = composed {
-    val scale = remember { mutableStateOf(1.0f) }
-    val scaleProgress = animateFloatAsState(targetValue = scale.value)
-    this
-        .scale(scaleProgress.value)
-        .pointerInteropFilter {
-            when (it.action) {
-                MotionEvent.ACTION_DOWN -> scale.value = scalePercent
-                MotionEvent.ACTION_CANCEL -> scale.value = 1.0f
-                MotionEvent.ACTION_UP -> {
-                    scale.value = 1.0f
-                    onClick()
-                }
-            }
-            true
-        }
-}
-
-fun Modifier.clearFocusOnKeyboardDismiss(
-    onKeyBoardClosed: () -> Unit = {},
-): Modifier = composed {
-    var isFocused by remember { mutableStateOf(false) }
-    var keyboardAppearedSinceLastFocused by remember { mutableStateOf(false) }
-
-    if (isFocused) {
-        val isKeyboardOpen by rememberIsKeyboardOpen()
-
-        val focusManager = LocalFocusManager.current
-        LaunchedEffect(isKeyboardOpen) {
-            if (isKeyboardOpen) {
-                keyboardAppearedSinceLastFocused = true
-            } else if (keyboardAppearedSinceLastFocused) {
-                focusManager.clearFocus()
-                onKeyBoardClosed()
-            }
-        }
-    }
-    onFocusEvent {
-        if (isFocused != it.isFocused) {
-            isFocused = it.isFocused
-            if (isFocused) {
-                keyboardAppearedSinceLastFocused = false
-            }
-        }
-    }
-}
 
 @Composable
 fun rememberIsKeyboardOpen(): State<Boolean> {

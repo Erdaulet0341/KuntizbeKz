@@ -39,7 +39,7 @@ fun CustomTabs(viewModel: CitiesViewModel, context: Context, navController: NavC
         TabRow(selectedTabIndex = selectedIndex,
             backgroundColor = GraySettings,
             modifier = Modifier
-                .shadow(elevation =1.dp),
+                .shadow(elevation =2.dp),
             indicator = { tabPositions: List<TabPosition> ->
                 Box {}
             }

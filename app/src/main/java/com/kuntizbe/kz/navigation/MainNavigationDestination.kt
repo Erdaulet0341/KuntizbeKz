@@ -9,8 +9,8 @@ import androidx.compose.runtime.Immutable
 import androidx.navigation.NavController
 import com.kuntizbe.kz.screens.home.HomeScreen
 import com.kuntizbe.kz.screens.info.InfoScreen
-import com.kuntizbe.kz.screens.playerTime.PlayerTimeScreen
 import com.kuntizbe.kz.screens.menu.MenuScreen
+import com.kuntizbe.kz.screens.playerTime.PlayerTimeScreen
 import kotlinx.parcelize.Parcelize
 
 sealed class MainNavigationDestination : Screen {
@@ -21,6 +21,7 @@ sealed class MainNavigationDestination : Screen {
     @Immutable
     @Parcelize
     object Home : MainNavigationDestination() {
+        @RequiresApi(Build.VERSION_CODES.O)
         @SuppressLint("StateFlowValueCalledInComposition")
         @Composable
         override fun Content(navController: NavController) {
@@ -32,6 +33,7 @@ sealed class MainNavigationDestination : Screen {
     @Immutable
     @Parcelize
     object Info : MainNavigationDestination() {
+        @RequiresApi(Build.VERSION_CODES.O)
         @Composable
         override fun Content(navController: NavController) {
             InfoScreen(navController)
@@ -51,6 +53,7 @@ sealed class MainNavigationDestination : Screen {
     @Immutable
     @Parcelize
     object PrayerTime : MainNavigationDestination() {
+        @RequiresApi(Build.VERSION_CODES.O)
         @Composable
         override fun Content(navController: NavController) {
             PlayerTimeScreen(navController)

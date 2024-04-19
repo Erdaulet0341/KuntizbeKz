@@ -23,7 +23,7 @@ fun SafeBottomNavigation(
             .background(backgroundColor)
             .safeNavigationPadding()
     ) {
-        CommonDivider(thickness = 8.dp)
+        CommonDivider(thickness = 5.dp)
         BottomNavigation(
             modifier = modifier,
             backgroundColor = backgroundColor,

@@ -83,7 +83,7 @@ fun CitiesScreen(navController: NavController) {
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             CenteredToolbar(title = stringResource(id = R.string.cities), onNavigationIconClick = {
-                navController.popBackStack()
+                navController.navigate(NavigationScreens.Home.route)
             })
             Column(
                 modifier = Modifier
@@ -143,6 +143,10 @@ fun ListOfCities(
     cities: List<City>, viewModel: CitiesViewModel, context: Context, navController: NavController
 ) {
     val coroutineScope = rememberCoroutineScope()
+    val toastSuccess = stringResource(id = R.string.toast_success)
+    val toastFail = stringResource(id = R.string.toast_failture)
+    val toastAlready = stringResource(id = R.string.toast_already)
+    val toastFirst = stringResource(id = R.string.toast_first_download)
 
     cities.forEach { city ->
         val isInserted = viewModel.checkInsert(city.cityId)
@@ -160,7 +164,6 @@ fun ListOfCities(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-
                 text = city.cityName.uppercase(),
                 style = TextStyle(fontWeight = FontWeight.SemiBold, fontSize = 16.sp, color = Main),
                 modifier = Modifier.clickable {
@@ -169,7 +172,7 @@ fun ListOfCities(
                         navController.navigate(NavigationScreens.PrayerTime.route)
                     } else {
                         Toast.makeText(
-                            context, "First download city then click", Toast.LENGTH_SHORT
+                            context, toastFirst, Toast.LENGTH_SHORT
                         ).show()
                     }
                 })
@@ -177,7 +180,7 @@ fun ListOfCities(
                 modifier = Modifier.clickable {
                     if (isInserted) {
                         Toast.makeText(
-                            context, "Already", Toast.LENGTH_SHORT
+                            context, toastAlready, Toast.LENGTH_SHORT
                         ).show()
                     } else {
                         viewModel.fetchPrayerTimes(city.cityId, context)
@@ -186,11 +189,11 @@ fun ListOfCities(
                             delay(1000)
                             if (viewModel.checkInsert(city.cityId)) {
                                 Toast.makeText(
-                                    context, "Success", Toast.LENGTH_SHORT
+                                    context, toastSuccess, Toast.LENGTH_SHORT
                                 ).show()
                                 icon = R.drawable.download_done_24
                             } else {
-                                Toast.makeText(context, "Failture", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(context, toastFail, Toast.LENGTH_SHORT).show()
                                 icon = R.drawable.download_24
                             }
                         }

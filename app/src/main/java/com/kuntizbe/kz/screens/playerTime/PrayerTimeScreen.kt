@@ -1,7 +1,9 @@
 package com.kuntizbe.kz.screens.playerTime
 
 import android.annotation.SuppressLint
+import android.os.Build
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -27,6 +29,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -57,6 +61,7 @@ import com.kuntizbe.kz.ui.theme.White
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+@RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun PlayerTimeScreen(navController: NavController) {
@@ -67,22 +72,25 @@ fun PlayerTimeScreen(navController: NavController) {
     val allTimes by viewModel.allTimes.collectAsState()
     val days by viewModel.days.collectAsState()
     val cityName by viewModel.cityname.collectAsState()
+    val textDisplayed = remember { mutableStateOf(false) }
+    val toastText = stringResource(id = R.string.toast_install)
 
     LaunchedEffect(viewModel.allTimes) {
         viewModel.observeAllTimes(instanceRoom)
     }
     val cityId = GetIdFromSharedPreferences(context = context)
     allTimes.size.toString()
-
     viewModel.todayDate(cityId)
 
-
-    rememberCoroutineScope().launch {
-        delay(300)
-        if (!viewModel.checkCityIsDownloaded(cityId)) {
-            navController.navigate(NavigationScreens.Cities.route)
-            Toast.makeText(context, "First download city!", Toast.LENGTH_SHORT).show()
+    if (!textDisplayed.value) {
+        rememberCoroutineScope().launch {
+            delay(300)
+            if (!viewModel.checkCityIsDownloaded(cityId)) {
+                navController.navigate(NavigationScreens.Cities.route)
+                Toast.makeText(context, toastText, Toast.LENGTH_SHORT).show()
+            }
         }
+        textDisplayed.value = true
     }
 
     Box(
@@ -115,29 +123,29 @@ fun PlayerTimeScreen(navController: NavController) {
                     text = cityName.uppercase(), style = TextStyle(
                         fontFamily = FontFamily.SansSerif,
                         fontWeight = FontWeight.W700,
-                        fontSize = 36.sp,
+                        fontSize = 30.sp,
                         color = Main
                     )
                 )
                 PointDivider(pointSize = 100)
                 Text(
-                    text = days.week,
+                    text = gregorianToHijriFormatted().uppercase(),
                     textAlign = TextAlign.Center,
                     style = TextStyle(
                         fontFamily = FontFamily.SansSerif,
                         fontWeight = FontWeight.W700,
-                        fontSize = 21.sp,
+                        fontSize = 19.sp,
                         color = Main
                     ),
                     modifier = Modifier.padding(vertical = 8.dp)
                 )
                 Text(
-                    text = days.day,
+                    text = gregorianDate().uppercase(),
                     textAlign = TextAlign.Center,
                     style = TextStyle(
                         fontFamily = FontFamily.SansSerif,
                         fontWeight = FontWeight.W700,
-                        fontSize = 23.sp,
+                        fontSize = 21.sp,
                         color = Main
                     ),
                     modifier = Modifier.padding(bottom = 8.dp)
@@ -252,7 +260,7 @@ fun PlayerTimeItem(text: String, time: String) {
                 style = TextStyle(
                     fontFamily = FontFamily.SansSerif,
                     fontWeight = FontWeight.W700,
-                    fontSize = 25.sp,
+                    fontSize = 20.sp,
                     color = Black
                 ),
                 modifier = Modifier.weight(0.7f)
@@ -263,7 +271,7 @@ fun PlayerTimeItem(text: String, time: String) {
                 style = TextStyle(
                     fontFamily = FontFamily.SansSerif,
                     fontWeight = FontWeight.W700,
-                    fontSize = 25.sp,
+                    fontSize = 20.sp,
                     color = Black
                 ),
                 modifier = Modifier.weight(0.3f)

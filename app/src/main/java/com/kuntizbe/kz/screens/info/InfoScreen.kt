@@ -1,9 +1,9 @@
 package com.kuntizbe.kz.screens.info
 
 import android.annotation.SuppressLint
-import android.util.Log
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,42 +13,29 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Divider
-import androidx.compose.material.Icon
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.kuntizbe.kz.R
 import com.kuntizbe.kz.navigation.NavigationScreens
+import com.kuntizbe.kz.screens.playerTime.gregorianDate
+import com.kuntizbe.kz.screens.playerTime.gregorianToHijriFormatted
 import com.kuntizbe.kz.ui.commonWidgets.CenteredToolbar
 import com.kuntizbe.kz.ui.commonWidgets.PointDivider
 import com.kuntizbe.kz.ui.commonWidgets.PointDividerVertical
-import com.kuntizbe.kz.ui.ext.clickableWithIndication
-import com.kuntizbe.kz.ui.theme.Black
 import com.kuntizbe.kz.ui.theme.Main
-import com.kuntizbe.kz.ui.theme.MainLight
 import com.kuntizbe.kz.ui.theme.TypographiesCostom
 import com.kuntizbe.kz.ui.theme.White
 
+@RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun InfoScreen(navController: NavController) {
@@ -76,13 +63,13 @@ fun InfoScreen(navController: NavController) {
 
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween){
                     Text(
-                        text = "26-Ақпан / 2024 жыл",
+                        text = gregorianDate(),
                         modifier = Modifier.padding(start = 3.dp,end = 4.dp).weight(0.5f),
                         style = TypographiesCostom.smallGrayText
                     )
                     PointDividerVertical(pointSize = 5)
                     Text(
-                        text = "15 Шабан 1445",
+                        text = gregorianToHijriFormatted(),
                         modifier = Modifier.padding(start = 8.dp).weight(0.5f),
                         style = TypographiesCostom.smallGrayText
                     )

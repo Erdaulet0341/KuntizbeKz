@@ -11,7 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import com.kuntizbe.kz.R
-import com.kuntizbe.kz.navigation.NavigationScreens
 import com.kuntizbe.kz.ui.commonWidgets.CenteredToolbar
 import com.kuntizbe.kz.ui.theme.White
 
