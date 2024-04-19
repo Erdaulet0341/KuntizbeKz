@@ -1,14 +1,8 @@
 package com.kuntizbe.kz.screens.home
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.os.Build
-import androidx.activity.OnBackPressedCallback
-import androidx.activity.OnBackPressedDispatcher
-import androidx.activity.compose.BackHandler
-import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,24 +13,23 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.kuntizbe.kz.R
-import com.kuntizbe.kz.screens.playerTime.gregorianToHijriFormatted
+import com.kuntizbe.kz.screens.calendar.getDateFromSharedPreferences
+import com.kuntizbe.kz.screens.calendar.gregorianToHijriFormattedForHome
+import com.kuntizbe.kz.ui.commonWidgets.CenteredToolbar
 import com.kuntizbe.kz.ui.commonWidgets.PointDivider
-import com.kuntizbe.kz.ui.theme.MainLight
+import com.kuntizbe.kz.ui.theme.GraySettings
+import com.kuntizbe.kz.ui.theme.GrayText
 import com.kuntizbe.kz.ui.theme.TypographiesCostom
 import com.kuntizbe.kz.ui.theme.White
 import java.time.LocalDate
@@ -47,24 +40,27 @@ import java.util.Locale
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(navController: NavController) {
+fun HomeForCalendarScreen(navController: NavController) {
 
-    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val context = LocalContext.current
-    val backDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher!!
-    val todayDate = LocalDate.now()
-    val formatter = DateTimeFormatter.ofPattern("MMMM", Locale("kk", "KZ"))
-    val monthName = todayDate.format(formatter)
-    val formatterWeek = DateTimeFormatter.ofPattern("EEEE", Locale("kk", "KZ"))
-    val weekName = todayDate.format(formatterWeek)
+    val date = getDateFromSharedPreferences(context)
+    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+    val dateParse = LocalDate.parse(date, formatter)
+    val kazakhLocale = Locale("kk", "KZ")
+    val weekName = dateParse.dayOfWeek.getDisplayName(java.time.format.TextStyle.FULL, kazakhLocale)
+    val monthName = dateParse.month.getDisplayName(java.time.format.TextStyle.FULL, kazakhLocale)
+    val islamicDate = gregorianToHijriFormattedForHome(date)
 
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
             .background(White),
         topBar = {
-            HomeToolBar(
-                scrollBehavior = scrollBehavior,
+            CenteredToolbar(
+                title = "",
+                onNavigationIconClick = {
+                    navController.popBackStack()
+                }
             )
         }
     ) {
@@ -74,16 +70,26 @@ fun HomeScreen(navController: NavController) {
             .padding(16.dp)) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(
-                    text = gregorianToHijriFormatted().uppercase(), style = TypographiesCostom.secondHeaderText,
+                    text = islamicDate.uppercase(), style = TypographiesCostom.secondHeaderText,
                     modifier = Modifier.padding(vertical = 5.dp)
                 )
                 PointDivider(pointSize = 100)
                 Spacer(modifier = Modifier.height(5.dp))
-                Text(text = todayDate.dayOfMonth.toString(), style = TypographiesCostom.mainDate)
-                Text(text = "${monthName.uppercase()} / ${todayDate.year} ЖЫЛ", style = TypographiesCostom.firstHeaderText)
+                Text(text = dateParse.dayOfMonth.toString(), style = TextStyle(
+                    fontFamily = FontFamily.SansSerif,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 180.sp,
+                    color = GrayText
+                )
+                )
+                Text(text = "${monthName.uppercase()} / ${dateParse.year} ЖЫЛ", style = TypographiesCostom.firstHeaderText)
                 Text(
                     text = weekName.uppercase(),
-                    style = TypographiesCostom.firstHeaderTextMain,
+                    style = TextStyle(
+                        fontFamily = FontFamily.SansSerif,
+                        fontWeight = FontWeight.W700,
+                        fontSize = 24.sp,
+                        color = GraySettings),
                     modifier = Modifier.padding(vertical = 5.dp)
                 )
                 PointDivider(pointSize = 100)
@@ -108,50 +114,4 @@ fun HomeScreen(navController: NavController) {
         }
     }
 
-    HandleBackButton(backDispatcher = backDispatcher) {
-        (context as? Activity)?.finish()
-    }
-}
-
-
-@Composable
-fun HandleBackButton(backDispatcher: OnBackPressedDispatcher, onBackPressed: () -> Unit) {
-    val lifecycleOwner = LocalLifecycleOwner.current
-
-    val backCallback = remember {
-        object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                onBackPressed()
-            }
-        }
-    }
-
-    BackHandler(onBack = onBackPressed)
-
-    DisposableEffect(lifecycleOwner) {
-        backDispatcher.addCallback(lifecycleOwner, backCallback)
-        onDispose {
-            backCallback.remove()
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun HomeToolBar(
-    scrollBehavior: TopAppBarScrollBehavior,
-) {
-    TopAppBar(
-        title = {
-            Image(
-                painterResource(R.drawable.logo_home),
-                contentDescription = "logo"
-            )
-        },
-        colors = TopAppBarDefaults.smallTopAppBarColors(
-            containerColor = White ,
-            scrolledContainerColor = MainLight.copy(alpha = 0.7f),
-        ),
-        scrollBehavior = scrollBehavior
-    )
 }

@@ -20,4 +20,7 @@ interface RoomDataDao {
 
     @Query("DELETE FROM prayer_times")
     suspend fun deleteAllData()
+
+    @Query("DELETE FROM prayer_times WHERE id = :id")
+    suspend fun deleteRoomDataById(id: Int)
 }

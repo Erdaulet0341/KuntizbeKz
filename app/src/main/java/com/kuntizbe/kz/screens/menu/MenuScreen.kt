@@ -34,6 +34,7 @@ fun MenuScreen(navController: NavController) {
 
     Box(
         modifier = Modifier
+            .background(White)
             .fillMaxSize()
             .background(White)
     ) {

@@ -85,16 +85,17 @@ fun PlayerTimeScreen(navController: NavController) {
     if (!textDisplayed.value) {
         rememberCoroutineScope().launch {
             delay(300)
-            if (!viewModel.checkCityIsDownloaded(cityId)) {
+            if (days.day == "") {
                 navController.navigate(NavigationScreens.Cities.route)
                 Toast.makeText(context, toastText, Toast.LENGTH_SHORT).show()
             }
+            textDisplayed.value = true
         }
-        textDisplayed.value = true
     }
 
     Box(
         modifier = Modifier
+            .background(White)
             .fillMaxSize()
             .background(White)
     ) {
@@ -106,11 +107,14 @@ fun PlayerTimeScreen(navController: NavController) {
                         NavigationScreens.Home.route
                     )
                 },
+                onNavigationCity = {
+                    navController.navigate(NavigationScreens.Cities.route)
+                    textDisplayed.value = false
+                },
                 navController = navController
             )
 
-
-
+            Spacer(modifier = Modifier.height(20.dp))
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -123,7 +127,7 @@ fun PlayerTimeScreen(navController: NavController) {
                     text = cityName.uppercase(), style = TextStyle(
                         fontFamily = FontFamily.SansSerif,
                         fontWeight = FontWeight.W700,
-                        fontSize = 30.sp,
+                        fontSize = if(cityName.length>15) 20.sp else 30.sp,
                         color = Main
                     )
                 )
@@ -184,6 +188,7 @@ fun PrayerTImeToolBar(
     title: String,
     isNavigationIconVisible: Boolean = true,
     onNavigationIconClick: (() -> Unit)? = null,
+    onNavigationCity: () -> Unit,
     navController: NavController
 ) {
 
@@ -236,7 +241,7 @@ fun PrayerTImeToolBar(
                 modifier = Modifier
                     .clip(CircleShape)
                     .clickableWithIndication {
-                        navController.navigate(NavigationScreens.Cities.route)
+                        onNavigationCity.invoke()
                     }
                     .padding(8.dp),
                 imageVector = ImageVector.vectorResource(id = R.drawable.city_24),

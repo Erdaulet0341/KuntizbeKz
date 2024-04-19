@@ -1,8 +1,7 @@
-package com.kuntizbe.kz.screens.menu.menuItemScreens
+package com.kuntizbe.kz.screens.calendar
 
 import android.annotation.SuppressLint
 import android.os.Build
-import android.util.Log
 import android.widget.CalendarView
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
@@ -18,9 +17,12 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -28,18 +30,26 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.kuntizbe.kz.R
+import com.kuntizbe.kz.navigation.NavigationScreens
 import com.kuntizbe.kz.ui.commonWidgets.CenteredToolbar
 import com.kuntizbe.kz.ui.commonWidgets.PointDivider
 import com.kuntizbe.kz.ui.theme.BlueBtn
 import com.kuntizbe.kz.ui.theme.TextColorMain
 import com.kuntizbe.kz.ui.theme.White
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 @RequiresApi(Build.VERSION_CODES.Q)
 @Composable
 fun CalendarScreen(navController: NavController) {
+    val viewModel: CalendarViewModel = viewModel()
+
+    val context = LocalContext.current
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -70,11 +80,12 @@ fun CalendarScreen(navController: NavController) {
 
             }
 
-            CalendarBody()
+            val date = CalendarBody()
 
             Button(
                 onClick = {
-
+                    viewModel.saveDateToSharedPreferences(context, date)
+                    navController.navigate(NavigationScreens.HomeForCalendarScreen.route)
                 },
                 modifier = Modifier
                     .height(45.dp)
@@ -94,7 +105,7 @@ fun CalendarScreen(navController: NavController) {
                         color = White,
                         fontSize = 21.sp,
                         fontWeight = FontWeight.Bold
-                    )
+                    ),
                 )
             }
         }
@@ -104,7 +115,10 @@ fun CalendarScreen(navController: NavController) {
 @RequiresApi(Build.VERSION_CODES.Q)
 @SuppressLint("ResourceAsColor")
 @Composable
-fun CalendarBody() {
+fun CalendarBody() : String{
+    val currentDate = LocalDate.now()
+    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+    val date = remember { mutableStateOf(currentDate.format(formatter))  }
 
     AndroidView(
         factory = {
@@ -117,10 +131,14 @@ fun CalendarBody() {
         },
         modifier = Modifier.fillMaxWidth(),
         update = { calendarView ->
-            calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
-                Log.d("ttt", "$year - $month - $dayOfMonth")
+            calendarView.setOnDateChangeListener { f, year, month, dayOfMonth ->
+
+                val m = if(month.toString().length == 1) "0${month+1}" else month+1
+                val d = if(dayOfMonth.toString().length == 1) "0$dayOfMonth" else dayOfMonth
+                date.value = "$year-$m-$d"
             }
         }
     )
+    return date.value
 }
 

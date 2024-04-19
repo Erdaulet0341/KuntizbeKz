@@ -6,17 +6,19 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.kuntizbe.kz.screens.calendar.CalendarScreen
 import com.kuntizbe.kz.screens.cities.CitiesScreen
+import com.kuntizbe.kz.screens.home.HomeForCalendarScreen
 import com.kuntizbe.kz.screens.menu.MenuScreen
 import com.kuntizbe.kz.screens.menu.menuItemScreens.AboutUsScreen
 import com.kuntizbe.kz.screens.menu.menuItemScreens.BookScreen
-import com.kuntizbe.kz.screens.menu.menuItemScreens.CalendarScreen
 import com.kuntizbe.kz.screens.menu.menuItemScreens.FaqScreen
 import com.kuntizbe.kz.screens.menu.menuItemScreens.LinksScreen
 import com.kuntizbe.kz.screens.menu.menuItemScreens.MessageScreen
 import com.kuntizbe.kz.screens.menu.menuItemScreens.QiblaScreen
 import com.kuntizbe.kz.screens.menu.menuItemScreens.SettingsScreen
 import com.kuntizbe.kz.screens.splash.SplashScreen
+import com.kuntizbe.kz.screens.splash.WelcomePage
 
 
 @RequiresApi(Build.VERSION_CODES.Q)
@@ -68,6 +70,12 @@ fun NavigationSetup(navController: NavHostController, startDestination: String) 
         }
         composable(NavigationScreens.Settings.route) {
             SettingsScreen(navController)
+        }
+        composable(NavigationScreens.HomeForCalendarScreen.route) {
+            HomeForCalendarScreen(navController)
+        }
+        composable(NavigationScreens.WelcomePage.route) {
+            WelcomePage(navController)
         }
     }
 }

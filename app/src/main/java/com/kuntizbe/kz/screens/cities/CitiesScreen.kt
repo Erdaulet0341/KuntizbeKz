@@ -2,7 +2,6 @@ package com.kuntizbe.kz.screens.cities
 
 import CustomTabs
 import android.content.Context
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -12,6 +11,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -55,7 +55,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.kuntizbe.kz.R
 import com.kuntizbe.kz.data.City
-import com.kuntizbe.kz.data.REGIONS
+import com.kuntizbe.kz.data.Regions
 import com.kuntizbe.kz.navigation.NavigationScreens
 import com.kuntizbe.kz.screens.menu.menuItemScreens.FaqItem
 import com.kuntizbe.kz.screens.playerTime.SaveIdToSharedPreferences
@@ -78,6 +78,7 @@ fun CitiesScreen(navController: NavController) {
 
     Box(
         modifier = Modifier
+            .background(White)
             .fillMaxSize()
             .background(White)
     ) {
@@ -99,6 +100,7 @@ fun CitiesScreen(navController: NavController) {
 @Composable
 fun AllCities(viewModel: CitiesViewModel, context: Context, navController: NavController) {
     var isDialogOpen by remember { mutableStateOf(false) }
+    val regions = Regions()
 
     Row(modifier = Modifier
         .fillMaxWidth()
@@ -119,19 +121,23 @@ fun AllCities(viewModel: CitiesViewModel, context: Context, navController: NavCo
     }
 
     if (isDialogOpen) {
-        SearchDialog(cities) {
-            isDialogOpen = !isDialogOpen
-        }
+        SearchDialog(cities = regions.AllCitiesOfRegions,
+            viewModel = viewModel,
+            context = context,
+            navController = navController,
+            onDismiss = {
+                isDialogOpen = !isDialogOpen
+            })
     }
 
     Spacer(modifier = Modifier.height(20.dp))
     LazyColumn {
-        items(REGIONS) {
+        items(regions.REGIONS) {
             FaqItem(title = it.nameKaz, content = {
                 Column(
                     modifier = Modifier.padding(horizontal = 10.dp)
                 ) {
-                    ListOfCities(it.cities, viewModel, context, navController)
+                    ListOfCities(it.cities, viewModel, context, navController, "null", false)
                 }
             })
         }
@@ -140,7 +146,12 @@ fun AllCities(viewModel: CitiesViewModel, context: Context, navController: NavCo
 
 @Composable
 fun ListOfCities(
-    cities: List<City>, viewModel: CitiesViewModel, context: Context, navController: NavController
+    cities: List<City>,
+    viewModel: CitiesViewModel,
+    context: Context,
+    navController: NavController,
+    query: String,
+    isFiltered: Boolean
 ) {
     val coroutineScope = rememberCoroutineScope()
     val toastSuccess = stringResource(id = R.string.toast_success)
@@ -148,7 +159,22 @@ fun ListOfCities(
     val toastAlready = stringResource(id = R.string.toast_already)
     val toastFirst = stringResource(id = R.string.toast_first_download)
 
-    cities.forEach { city ->
+    var finalList = cities
+    val filteredCities = cities.filter {
+        it.cityName.contains(query, ignoreCase = true)
+    }
+
+    if (isFiltered) {
+        if (filteredCities.isEmpty()) {
+            Text(
+                text = stringResource(id = R.string.dont_find_city),
+                style = MaterialTheme.typography.body1,
+            )
+        }
+        finalList = filteredCities.sortedBy { it.cityName }
+    }
+
+    finalList.forEach { city ->
         val isInserted = viewModel.checkInsert(city.cityId)
         var icon by remember {
             mutableStateOf(if (isInserted) R.drawable.download_done_24 else R.drawable.download_24)
@@ -163,8 +189,7 @@ fun ListOfCities(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = city.cityName.uppercase(),
+            Text(text = city.cityName.uppercase(),
                 style = TextStyle(fontWeight = FontWeight.SemiBold, fontSize = 16.sp, color = Main),
                 modifier = Modifier.clickable {
                     if (isInserted) {
@@ -186,11 +211,12 @@ fun ListOfCities(
                         viewModel.fetchPrayerTimes(city.cityId, context)
                         coroutineScope.launch {
                             icon = R.drawable.access_time_24
-                            delay(1000)
+                            delay(1500)
                             if (viewModel.checkInsert(city.cityId)) {
                                 Toast.makeText(
                                     context, toastSuccess, Toast.LENGTH_SHORT
                                 ).show()
+                                SaveIdToSharedPreferences(context = context, city.cityId)
                                 icon = R.drawable.download_done_24
                             } else {
                                 Toast.makeText(context, toastFail, Toast.LENGTH_SHORT).show()
@@ -215,47 +241,112 @@ fun ListOfCities(
             }
         }
     }
-
-
 }
 
+@Composable
+fun ListOfCities2(
+    cities: List<City>,
+    viewModel: CitiesViewModel,
+    context: Context,
+    navController: NavController,
+    query: String,
+) {
+    val coroutineScope = rememberCoroutineScope()
+    val toastSuccess = stringResource(id = R.string.toast_success)
+    val toastFail = stringResource(id = R.string.toast_failture)
+    val toastAlready = stringResource(id = R.string.toast_already)
+    val toastFirst = stringResource(id = R.string.toast_first_download)
 
-val cities = listOf(
-    "New York",
-    "Los Angeles",
-    "Chicago",
-    "Houston",
-    "Phoenix",
-    "Philadelphia",
-    "San Afdntonio",
-    "San Diego",
-    "Dallas",
-    "San Jose",
-    "New York",
-    "Los Angeles",
-    "Chicago",
-    "Houston",
-    "Phoenix",
-    "Philadelphia",
-    "San Afdntonio",
-    "San Diego",
-    "Dallas",
-    "San Jose",
-    "New York",
-    "Los Angeles",
-    "Chicago",
-    "Houston",
-    "Phoenix",
-    "Philadelphia",
-    "San Afdntonio",
-    "San Diego",
-    "Dallas",
-    "San Jose"
-)
+    var filteredCities = cities.filter {
+        it.cityName.contains(query, ignoreCase = true)
+    }
+
+    if (filteredCities.isEmpty()) {
+        Text(
+            text = stringResource(id = R.string.dont_find_city),
+            style = MaterialTheme.typography.body1,
+        )
+    }
+    filteredCities = filteredCities.sortedBy { it.cityName }
+
+    LazyColumn {
+        items(filteredCities){city ->
+            val isInserted = viewModel.checkInsert(city.cityId)
+            var icon by remember {
+                mutableStateOf(if (isInserted) R.drawable.download_done_24 else R.drawable.download_24)
+            }
+            if (isInserted) painterResource(id = R.drawable.download_done_24) else painterResource(
+                id = R.drawable.download_24
+            )
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(40.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(text = city.cityName.uppercase(),
+                    style = TextStyle(fontWeight = FontWeight.SemiBold, fontSize = 16.sp, color = Main),
+                    modifier = Modifier.clickable {
+                        if (isInserted) {
+                            SaveIdToSharedPreferences(context = context, city.cityId)
+                            navController.navigate(NavigationScreens.PrayerTime.route)
+                        } else {
+                            Toast.makeText(
+                                context, toastFirst, Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    })
+                Icon(
+                    modifier = Modifier.clickable {
+                        if (isInserted) {
+                            Toast.makeText(
+                                context, toastAlready, Toast.LENGTH_SHORT
+                            ).show()
+                        } else {
+                            viewModel.fetchPrayerTimes(city.cityId, context)
+                            coroutineScope.launch {
+                                icon = R.drawable.access_time_24
+                                delay(1500)
+                                if (viewModel.checkInsert(city.cityId)) {
+                                    Toast.makeText(
+                                        context, toastSuccess, Toast.LENGTH_SHORT
+                                    ).show()
+                                    SaveIdToSharedPreferences(context = context, city.cityId)
+                                    icon = R.drawable.download_done_24
+                                } else {
+                                    Toast.makeText(context, toastFail, Toast.LENGTH_SHORT).show()
+                                    icon = R.drawable.download_24
+                                }
+                            }
+
+                        }
+                    }, painter = painterResource(id = icon), contentDescription = "null", tint = Main
+                )
+            }
+            Row(
+                verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()
+            ) {
+                repeat(100) {
+                    Divider(
+                        modifier = Modifier
+                            .width(4.dp)
+                            .background(Main)
+                    )
+                    Spacer(modifier = Modifier.width(2.dp))
+                }
+            }
+        }
+    }
+}
 
 @Composable
 fun SearchDialog(
-    cities: List<String>, onDismiss: () -> Unit
+    cities: List<City>,
+    onDismiss: () -> Unit,
+    viewModel: CitiesViewModel,
+    navController: NavController,
+    context: Context
 ) {
     var searchText by remember { mutableStateOf("") }
 
@@ -267,6 +358,7 @@ fun SearchDialog(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .fillMaxHeight(0.9f)
                     .padding(12.dp)
             ) {
                 Icon(imageVector = Icons.Default.Close,
@@ -277,59 +369,26 @@ fun SearchDialog(
                         .clickable { onDismiss() }
                         .align(Alignment.End))
 
-                OutlinedTextField(value = searchText,
+                OutlinedTextField(
+                    value = searchText,
                     onValueChange = { searchText = it },
                     label = {
-                        Text(
-                            stringResource(id = R.string.search_hidden), color = GraySettings
-                        )
+                        Text(stringResource(id = R.string.search_hidden), color = GraySettings)
                     },
                     keyboardOptions = KeyboardOptions.Default.copy(
                         imeAction = ImeAction.Done
                     ),
-                    keyboardActions = KeyboardActions(onDone = { /* Perform search action if needed */ }),
+                    keyboardActions = KeyboardActions(onDone = {  }),
                     modifier = Modifier.fillMaxWidth(),
                     colors = TextFieldDefaults.textFieldColors(
                         focusedIndicatorColor = Main, backgroundColor = White, cursorColor = Main
-                    ))
+                    )
+                )
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                FilteredCitiesList(cities = cities, query = searchText)
+                ListOfCities2(cities, viewModel, context, navController, searchText)
             }
         }
-    }
-}
-
-@Composable
-fun FilteredCitiesList(
-    cities: List<String>, query: String
-) {
-    val filteredCities = cities.filter {
-        it.contains(query, ignoreCase = true)
-    }
-
-    LazyColumn {
-
-        items(filteredCities) { city ->
-            Text(
-                text = city,
-                style = MaterialTheme.typography.body1,
-                modifier = Modifier
-                    .height(40.dp)
-                    .fillMaxWidth()
-                    .padding(top = 8.dp)
-                    .clickable {
-                        Log.d("API", city)
-                    },
-            )
-        }
-    }
-
-    if (filteredCities.isEmpty()) {
-        Text(
-            text = "no city",
-            style = MaterialTheme.typography.body1,
-        )
     }
 }

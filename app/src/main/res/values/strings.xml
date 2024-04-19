@@ -133,7 +133,17 @@
     <string name="toast_install">Намаз уақыттарын көру үшін, қалаларды жүктеу қажет!</string>
     <string name="toast_success">Қала сәтті жүктелді. </string>
     <string name="toast_already">Қала жүктеліп қойған. </string>
-    <string name="toast_failture">Қаланы жүктеу кезінде қателік орын алды, қайта байқап көріңіз.</string>
+    <string name="toast_failture">Қаланы жүктеу кезінде қателік орын алды, интернет байланысын тексеріп, қайта байқап көріңіз.</string>
     <string name="toast_first_download">Бірінші қаланы жүктеп, содан кейін басыңыз.</string>
+    <string name="dont_find_city">Қала табылмады</string>
+    <string name="confirm">Жою</string>
+    <string name="dissmis">Болдырмау</string>
+    <string name="dialog_title">Қаланы жою</string>
+    <string name="dialog_boby">Қаланы жойғаннан кейін, намаз уақытын көру үшін қаланы интернет арқылы қайта жүктеу қажет болады</string>
+    <string name="dialog_delete_success">Қала сәтті жойылды</string>
+    <string name="qibla_text">Жақын арада қосылады, \nтүсіністікпен қарағандарыңызға рахмет!</string>
+    <string name="continue_text">Жалғастыру</string>
+    <string name="welcome">Қош келдіңіз</string>
+    <string name="welcome_text">Kuntizbe Kz қолданба арқылы намаз уақыттарын бір рет жүктеп алып, қалған кез-келген уақытта, кез келген жерде интернет байланысынсыз көріңіз. Келесі беттен өзіңіздің қалаларыңызды жүктеп алыңыз. \n\nБізді таңдағаныңызға рахмет. Сәттілік!</string>
 
 </resources>

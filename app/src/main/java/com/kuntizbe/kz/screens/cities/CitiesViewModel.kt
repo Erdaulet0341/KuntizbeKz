@@ -1,6 +1,8 @@
 package com.kuntizbe.kz.screens.cities
 
 import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -42,20 +44,36 @@ class CitiesViewModel : ViewModel() {
         return allTimes.value.map { it.id }.contains(id)
     }
 
-    fun deleteAllTImes(context: Context){
+    fun deleteById(context: Context, id:Int){
         viewModelScope.launch {
             val instance = DatabaseBuilder.getInstance(context)
-            instance.prayerDao().deleteAllData()
+            instance.prayerDao().deleteRoomDataById(id)
 
         }
     }
-
 
     fun fetchPrayerTimes(id: Int, context: Context) {
-        repository.fetchPrayerTimes(id) { prayerTimes ->
-            prayerTimesLiveData.postValue(prayerTimes)
-            insertData(id, prayerTimes!!,  context)
+        if(checkInternetConnection(context)){
+            repository.fetchPrayerTimes(id) { prayerTimes ->
+                prayerTimesLiveData.postValue(prayerTimes)
+                insertData(id, prayerTimes!!,  context)
+            }
         }
     }
 
+    fun checkInternetConnection(context: Context): Boolean {
+        return NetworkUtils.isInternetConnected(context)
+    }
+
+}
+
+object NetworkUtils {
+    fun isInternetConnected(context: Context): Boolean {
+        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        val network = connectivityManager.activeNetwork ?: return false
+        val networkCapabilities = connectivityManager.getNetworkCapabilities(network) ?: return false
+
+        return networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+    }
 }
